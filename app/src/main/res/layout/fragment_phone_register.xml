@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="vm"
+            type="com.codestrela.product.viewmodels.PhoneRegisterViewModel" />
+    </data>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <EditText
+            android:id="@+id/etName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            app:binding="@{vm.name}"
+            android:hint="Enter Name"
+            android:layout_centerInParent="true"/>
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:binding="@{vm.email}"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="40dp"
+            android:layout_below="@id/etName"
+            android:hint="Enter Email"
+            android:layout_centerInParent="true"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/etEmail"
+            android:onClick="@{vm::onPhoneRegister}"
+            android:layout_marginTop="40dp"
+            android:layout_centerInParent="true"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/white_color"
+            android:text="Register"/>
+    </RelativeLayout>
+</layout>
