@@ -20,7 +20,6 @@ public class GmailRegisterViewModel {
         bundle.putString("phoneNo",phoneNo.get());
         GmailRegisterTwoFragment gmailRegisterTwoFragment=new GmailRegisterTwoFragment();
         gmailRegisterTwoFragment.setArguments(bundle);
-        AppUtil.showToast((BaseActivity) gmailRegisterFragment.getActivity(),"hhh");
         gmailRegisterTwoFragment.addFragment((BaseActivity) gmailRegisterFragment.getActivity(),gmailRegisterTwoFragment);
 
     }

@@ -4,9 +4,11 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
+import com.codestrela.product.HomeAdapter;
 import com.codestrela.product.R;
 import com.codestrela.product.base.activity.BaseActivity;
 import com.codestrela.product.fragments.HomeFragment;
+import com.codestrela.product.fragments.MyAccountFragment;
 import com.codestrela.product.fragments.PhoneSignInFragment;
 import com.codestrela.product.util.BindableString;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -21,6 +23,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import static androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
+
 public class HomeViewModel {
     FirebaseAuth mAuth;
     HomeFragment homeFragment;
@@ -30,6 +34,7 @@ public class HomeViewModel {
     public BindableString cusNumber = new BindableString();
     public BindableString cusEmail = new BindableString();
     GoogleSignInClient mGoogleSignInClient;
+    public HomeAdapter mViewPagerAdapter;
 
     public HomeViewModel(HomeFragment homeFragment) {
         this.homeFragment = homeFragment;
@@ -43,6 +48,8 @@ public class HomeViewModel {
                 .build();
         mGoogleSignInClient= GoogleSignIn.getClient(homeFragment.getActivity(),gso);
         showData();
+        mViewPagerAdapter = new HomeAdapter(homeFragment.getChildFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+
 
     }
 
@@ -80,5 +87,8 @@ public class HomeViewModel {
             }
         });
     }
+      public void onAccountClicked(View view){
+          MyAccountFragment.addFragment((BaseActivity)homeFragment.getActivity());
+      }
 
 }

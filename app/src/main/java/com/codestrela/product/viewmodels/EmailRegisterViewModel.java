@@ -18,7 +18,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +31,7 @@ public class EmailRegisterViewModel {
     public BindableString name = new BindableString();
     public BindableString email = new BindableString();
     public BindableString number = new BindableString();
+     boolean present=false;
     public BindableString password = new BindableString();
     public BindableBoolean running = new BindableBoolean(true);
     private static final String TAG = "EmailRegisterViewModel";
@@ -78,9 +82,23 @@ public class EmailRegisterViewModel {
     }
 
     public void onRegister(View view) {
-        Log.e(TAG, "onResponse: " + email.get());
-        createAccount(email.get(), password.get());
 
+        Log.e(TAG, "onResponse: " + email.get());
+        Query q1=db.collection("users").whereEqualTo("Email",email.get());
+       q1.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+           @Override
+           public void onComplete(@NonNull Task<QuerySnapshot> task) {
+               QuerySnapshot document = task.getResult();
+
+               Toast.makeText(emailRegisterFragment.getActivity(), "present", Toast.LENGTH_SHORT).show();
+               present=true;
+           }
+       });
+       if(present){
+           Toast.makeText(emailRegisterFragment.getActivity(), "teree", Toast.LENGTH_SHORT).show();
+       }else {
+           createAccount(email.get(), password.get());
+       }
     }
 
     private boolean validateForm() {

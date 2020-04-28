@@ -76,7 +76,6 @@ public class PhoneLoginViewModel {
                                 Bundle bundle = new Bundle();
                                 bundle.putString("phoneNo", PhoneNumber);
                                 Log.e("PhoneLoginViewModel", "dumdum " + PhoneNumber);
-                                Toast.makeText(phoneLoginFragment.getActivity(), "ijs " + PhoneNumber, Toast.LENGTH_SHORT).show();
                                 fragment.setArguments(bundle);
                                 fragment.addFragment((BaseActivity) phoneLoginFragment.getActivity(), fragment);
                             } else {
