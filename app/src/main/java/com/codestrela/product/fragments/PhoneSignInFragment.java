@@ -33,8 +33,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 
 public class PhoneSignInFragment extends Fragment {
-    FragmentPhoneSignInBinding binding;
-    PhoneSignInViewModel vm;
+FragmentPhoneSignInBinding binding;
+PhoneSignInViewModel vm;
     SignInButton signInButton;
     FirebaseAuth mAuth;
     GoogleSignInClient mGoogleSignInClient;
@@ -70,7 +70,7 @@ public class PhoneSignInFragment extends Fragment {
     }
 
     public static void addFragment(BaseActivity activity) {
-        activity.replaceFragment(new PhoneSignInFragment(), false);
+        activity.replaceFragment(new PhoneSignInFragment(), true);
     }
 
     @Override

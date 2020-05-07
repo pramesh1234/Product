@@ -41,7 +41,7 @@ public class EmailRegisterFragment extends Fragment {
     }
 
     public static void addFragment(BaseActivity activity) {
-        activity.replaceFragment(new EmailRegisterFragment(), true);
+        activity.replaceFragment(new EmailRegisterFragment(), false);
     }
 
 }

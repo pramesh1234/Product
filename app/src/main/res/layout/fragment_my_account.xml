@@ -72,9 +72,26 @@
             android:layout_height="80dp"
             android:text="My Commodities list"
             android:gravity="center"
+            android:onClick="@{vm::onMyCommodity}"
             android:textSize="20dp"
             />
         </androidx.cardview.widget.CardView>
-
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            app:cardCornerRadius="12dp"
+            android:layout_marginTop="8dp"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="My Contact list"
+                android:gravity="center"
+                android:onClick="@{vm::onMyContact}"
+                android:textSize="20dp"
+                />
+        </androidx.cardview.widget.CardView>
     </LinearLayout>
 </layout>

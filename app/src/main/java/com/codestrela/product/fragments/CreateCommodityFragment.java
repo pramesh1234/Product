@@ -77,7 +77,7 @@ public class CreateCommodityFragment extends Fragment{
        return binding.getRoot();
     }
     public static void addFragment(BaseActivity activity) {
-        activity.replaceFragment(new CreateCommodityFragment(), false);
+        activity.replaceFragment(new CreateCommodityFragment(), true);
     }
     }
 

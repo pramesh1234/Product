@@ -30,9 +30,7 @@ public class CreateCommodityViewModel {
         db=FirebaseFirestore.getInstance();
         mAuth=FirebaseAuth.getInstance();
     }
-    public CreateCommodityViewModel(RadioGroup modeRadioGroup) {
-       this.modeRadioGroup=modeRadioGroup;
-    }
+
     public void onSubmit(View view){
         String userId=mAuth.getUid();
         Map<String, Object> commodity = new HashMap<>();

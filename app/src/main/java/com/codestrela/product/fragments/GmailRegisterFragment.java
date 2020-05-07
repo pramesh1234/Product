@@ -62,6 +62,6 @@ public class GmailRegisterFragment extends Fragment {
     }
 
     public static void addFragment(BaseActivity activity) {
-        activity.replaceFragment(new GmailRegisterFragment(), true);
+        activity.replaceFragment(new GmailRegisterFragment(), false);
     }
 }

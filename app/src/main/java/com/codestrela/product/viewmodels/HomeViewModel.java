@@ -1,11 +1,14 @@
 package com.codestrela.product.viewmodels;
 
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
-import com.codestrela.product.HomeAdapter;
+import com.codestrela.product.adapters.HomeAdapter;
 import com.codestrela.product.R;
+import com.codestrela.product.adapters.MyCommoditiesAdapter;
 import com.codestrela.product.base.activity.BaseActivity;
 import com.codestrela.product.fragments.HomeFragment;
 import com.codestrela.product.fragments.MyAccountFragment;
@@ -18,10 +21,17 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
 
 import static androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
@@ -89,6 +99,31 @@ public class HomeViewModel {
     }
       public void onAccountClicked(View view){
           MyAccountFragment.addFragment((BaseActivity)homeFragment.getActivity());
+      }
+      public void onBottomSheet(View view){
+          final MyCommoditiesAdapter myCommoditiesAdapter = new MyCommoditiesAdapter(new ArrayList<RowCommodityViewModel>());
+        FirebaseFirestore firebaseFirestore=FirebaseFirestore.getInstance();
+          final RowCommodityViewModel[] viewModel = new RowCommodityViewModel[1];
+          final ArrayList<RowCommodityViewModel> viewModels=new ArrayList<>();
+          firebaseFirestore.collection("commodities").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                for(DocumentChange doc: queryDocumentSnapshots.getDocumentChanges()){
+                    if(doc.getType()==DocumentChange.Type.ADDED){
+                        String name=doc.getDocument().getString("name");
+                        String price=doc.getDocument().getString("price");
+                        viewModel[0] =new RowCommodityViewModel();
+                        viewModel[0].name.set(name);
+                        viewModel[0].price.set(price);
+                        viewModels.add(viewModel[0]);
+                    }
+                }
+            }
+        });
+          BottomSheetDialog bottomSheetDialog=new BottomSheetDialog(homeFragment.getActivity());
+          bottomSheetDialog.setContentView(R.layout.dialog_fragment);
+          Toast.makeText(homeFragment.getActivity(), "Bottom", Toast.LENGTH_SHORT).show();
+          bottomSheetDialog.show();
       }
 
 }

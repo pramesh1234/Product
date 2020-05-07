@@ -1,4 +1,4 @@
-package com.codestrela.product;
+package com.codestrela.product.adapters;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
