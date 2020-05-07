@@ -33,7 +33,7 @@ public class EmailRegisterViewModel {
     public BindableString number = new BindableString();
      boolean present=false;
     public BindableString password = new BindableString();
-    public BindableBoolean running = new BindableBoolean(true);
+    public BindableBoolean running = new BindableBoolean();
     private static final String TAG = "EmailRegisterViewModel";
     FirebaseFirestore db;
     EmailRegisterFragment emailRegisterFragment;
@@ -65,6 +65,10 @@ public class EmailRegisterViewModel {
                             saveDetail.put("Email", email);
                             saveDetail.put("Name", name.get());
                             db.collection("users").document(userId).set(saveDetail);
+                            Map<String, Object> userContact = new HashMap<>();
+                            userContact.put("userId",userId);
+                            db.collection("user contact").document(number.get()).set(userContact);
+
                             HomeFragment.addFragment((BaseActivity) emailRegisterFragment.getActivity());
                         } else {
                             // If sign in fails, display a message to the user.
