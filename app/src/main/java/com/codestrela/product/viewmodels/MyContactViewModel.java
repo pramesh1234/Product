@@ -24,7 +24,7 @@ public class MyContactViewModel {
     private static StringBuffer no=new StringBuffer(" ");
     CollectionReference usersCref;
     ArrayList<RowContactViewModel> data;
-     String mobile;
+
     public ContactAdapter contactAdapter;
     private static final String TAG = "MyContactViewModel";
 
@@ -41,12 +41,12 @@ public class MyContactViewModel {
                 null, null, null, null);
         while (cursor.moveToNext()) {
              final String name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-            mobile = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+            final String mobile = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
             // Toast.makeText(getActivity(), "name: " + name, Toast.LENGTH_SHORT).show();
             viewModel = new RowContactViewModel();
             viewModel.contactName.set(name);
             viewModel.contactNumber.set(mobile);
-
+            viewModel.visiblity.set(true);
             db.collection("user contact").document(mobile).get()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
