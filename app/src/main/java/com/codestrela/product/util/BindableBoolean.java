@@ -9,10 +9,6 @@ import androidx.databinding.BaseObservable;
 public class BindableBoolean extends BaseObservable {
     boolean mValue;
 
-    public BindableBoolean(boolean mValue) {
-        this.mValue = mValue;
-    }
-
     public boolean get() {
         return mValue;
     }

@@ -77,10 +77,14 @@ public class GmailRegisterTwoViewModel {
                                     String personEmail = acct.getEmail();
 
                                     Map<String, Object> saveNo = new HashMap<>();
+
                                     saveNo.put("Phone Number", PhoneNumber);
                                     saveNo.put("Name", personName);
                                     saveNo.put("Email", personEmail);
                                     db.collection("users").document(userId).set(saveNo);
+                                    Map<String, Object> userContact = new HashMap<>();
+                                    userContact.put("userId",userId);
+                                    db.collection("user contact").document(PhoneNumber).set(userContact);
                                     HomeFragment.addFragment((BaseActivity) gmailRegisterTwoFragment.getActivity());
                                 }
                             } else {

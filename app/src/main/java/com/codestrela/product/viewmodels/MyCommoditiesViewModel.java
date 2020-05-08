@@ -41,9 +41,16 @@ public class MyCommoditiesViewModel {
                             if(doc.getType()==DocumentChange.Type.ADDED){
                                 String name=doc.getDocument().getString("name");
                                 String price=doc.getDocument().getString("price");
+                                String type=doc.getDocument().getString("type");
+                                String qty=doc.getDocument().getString("unit");
+                                String mode=doc.getDocument().getString("mode");
+
                                  viewModel=new RowCommodityViewModel();
                                 viewModel.name.set(name);
                                 viewModel.price.set(price);
+                                viewModel.type.set(type);
+                                viewModel.qty.set(qty);
+                                viewModel.mode.set(mode);
                                 viewModels.add(viewModel);
                                 Log.e(TAG,"name: "+name);
                             }

@@ -21,7 +21,6 @@ public class MyAccountViewModel {
         MyCommoditiesFragment.addFragment((BaseActivity) myAccountFragment.getActivity());
     }
     public void onMyContact(View view){
-        Toast.makeText(myAccountFragment.getContext(), "fafa", Toast.LENGTH_SHORT).show();
         MyContactListFragment.addFragment((BaseActivity) myAccountFragment.getActivity());
     }
 }

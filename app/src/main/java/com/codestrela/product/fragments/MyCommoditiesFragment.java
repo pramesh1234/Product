@@ -34,6 +34,6 @@ public class MyCommoditiesFragment extends Fragment {
         return binding.getRoot();
     }
     public static void addFragment(BaseActivity activity) {
-        activity.replaceFragment(new MyCommoditiesFragment(), false);
+        activity.replaceFragment(new MyCommoditiesFragment(), true);
     }
 }

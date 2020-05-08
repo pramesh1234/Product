@@ -31,7 +31,7 @@ FragmentRequestTabBinding binding;
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_request_tab, container, true);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_request_tab, container, false);
         binding.setVm(vm);
         ((BaseActivity) getActivity()).setToolbarVisibility(false);
         return binding.getRoot();    }

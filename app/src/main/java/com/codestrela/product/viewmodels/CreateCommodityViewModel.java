@@ -1,5 +1,6 @@
 package com.codestrela.product.viewmodels;
 
+import android.app.ProgressDialog;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -24,6 +25,7 @@ public class CreateCommodityViewModel {
     public FirebaseFirestore db;
     public FirebaseAuth mAuth;
     RadioGroup modeRadioGroup;
+
     CreateCommodityFragment createCommodityFragment;
     public CreateCommodityViewModel(CreateCommodityFragment createCommodityFragment) {
         this.createCommodityFragment=createCommodityFragment;
@@ -32,6 +34,8 @@ public class CreateCommodityViewModel {
     }
 
     public void onSubmit(View view){
+        ProgressDialog dialog = ProgressDialog.show(createCommodityFragment.getActivity(), "",
+                "Please wait...", true);
         String userId=mAuth.getUid();
         Map<String, Object> commodity = new HashMap<>();
         commodity.put("name", name.get());
@@ -42,6 +46,6 @@ public class CreateCommodityViewModel {
         commodity.put("type",type.get());
 
         db.collection("users").document(userId).collection("commodity_list").document().set(commodity);
-
+dialog.dismiss();
     }
 }

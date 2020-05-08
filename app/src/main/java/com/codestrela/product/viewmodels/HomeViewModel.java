@@ -1,10 +1,13 @@
 package com.codestrela.product.viewmodels;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.codestrela.product.adapters.HomeAdapter;
 import com.codestrela.product.R;
@@ -44,6 +47,7 @@ public class HomeViewModel {
     public BindableString cusNumber = new BindableString();
     public BindableString cusEmail = new BindableString();
     GoogleSignInClient mGoogleSignInClient;
+    private static final String TAG = "HomeViewModel";
     public HomeAdapter mViewPagerAdapter;
 
     public HomeViewModel(HomeFragment homeFragment) {
@@ -101,28 +105,36 @@ public class HomeViewModel {
           MyAccountFragment.addFragment((BaseActivity)homeFragment.getActivity());
       }
       public void onBottomSheet(View view){
-          final MyCommoditiesAdapter myCommoditiesAdapter = new MyCommoditiesAdapter(new ArrayList<RowCommodityViewModel>());
-        FirebaseFirestore firebaseFirestore=FirebaseFirestore.getInstance();
-          final RowCommodityViewModel[] viewModel = new RowCommodityViewModel[1];
-          final ArrayList<RowCommodityViewModel> viewModels=new ArrayList<>();
-          firebaseFirestore.collection("commodities").addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                for(DocumentChange doc: queryDocumentSnapshots.getDocumentChanges()){
-                    if(doc.getType()==DocumentChange.Type.ADDED){
-                        String name=doc.getDocument().getString("name");
-                        String price=doc.getDocument().getString("price");
-                        viewModel[0] =new RowCommodityViewModel();
-                        viewModel[0].name.set(name);
-                        viewModel[0].price.set(price);
-                        viewModels.add(viewModel[0]);
-                    }
-                }
-            }
-        });
           BottomSheetDialog bottomSheetDialog=new BottomSheetDialog(homeFragment.getActivity());
           bottomSheetDialog.setContentView(R.layout.dialog_fragment);
-          Toast.makeText(homeFragment.getActivity(), "Bottom", Toast.LENGTH_SHORT).show();
+
+          final MyCommoditiesAdapter myCommoditiesAdapter = new MyCommoditiesAdapter(new ArrayList<RowCommodityViewModel>());
+          RecyclerView recyclerView = (RecyclerView) bottomSheetDialog.findViewById(R.id.recyclerView);
+          FirebaseFirestore firebaseFirestore=FirebaseFirestore.getInstance();
+
+          final ArrayList<RowCommodityViewModel> viewModels=new ArrayList<>();
+          firebaseFirestore.collection("Commodities").addSnapshotListener(new EventListener<QuerySnapshot>() {
+              @Override
+              public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                  for(DocumentChange doc: queryDocumentSnapshots.getDocumentChanges()){
+                      if(doc.getType()==DocumentChange.Type.ADDED){
+                          String name=doc.getDocument().getString("name");
+                          String price=doc.getDocument().getString("price");
+                           RowCommodityViewModel viewModel =new RowCommodityViewModel();                          viewModel.name.set(name);
+                          viewModel.price.set(price);
+                          Log.e(TAG,"bottomsheet: "+name);
+                          viewModels.add(viewModel);
+                      }
+                  }
+                  myCommoditiesAdapter.addAll(viewModels);
+              }
+          });
+
+
+          recyclerView.setHasFixedSize(true);
+          recyclerView.setLayoutManager(new LinearLayoutManager(homeFragment.getActivity()));
+          recyclerView.setAdapter(myCommoditiesAdapter);
+
           bottomSheetDialog.show();
       }
 

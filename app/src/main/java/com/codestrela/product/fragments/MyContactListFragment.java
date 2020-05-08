@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ public class MyContactListFragment extends Fragment {
     FragmentMyContactListBinding binding;
     MyContactViewModel vm;
     public ContactAdapter contactAdapter;
+    private static final String TAG = "MyContactListFragment";
     RecyclerView mRecyclerview;
     RowContactViewModel viewModel;
     ArrayList<RowContactViewModel> data;
@@ -47,6 +49,7 @@ public class MyContactListFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_contact_list, container, false);
         binding.setVm(vm);
+        viewModel=new RowContactViewModel();
         mRecyclerview=(RecyclerView) binding.getRoot().findViewById(R.id.contactRecyclerview);
         data=new ArrayList<RowContactViewModel>();
         ((BaseActivity) getActivity()).setToolbarVisibility(true);
@@ -55,14 +58,12 @@ public class MyContactListFragment extends Fragment {
                 != PackageManager.PERMISSION_GRANTED) {
             getActivity().requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 1);
         } else {
-            getContacts();
+           vm.getContacts();
         }
         return binding.getRoot();
     }
 
     private void getContacts() {
-         viewModel=new RowContactViewModel();
-        contactAdapter=new ContactAdapter(new ArrayList<RowContactViewModel>());
         Cursor cursor = getActivity().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                 null, null, null, null);
         while (cursor.moveToNext()) {
@@ -71,11 +72,13 @@ public class MyContactListFragment extends Fragment {
            // Toast.makeText(getActivity(), "name: " + name, Toast.LENGTH_SHORT).show();
             viewModel.contactName.set(name);
             viewModel.contactNumber.set(mobile);
+            Log.e(TAG, "getContacts: "+name+"  phone "+mobile );
             data.add(viewModel);
         }
-               contactAdapter.addAll(data);
-                mRecyclerview.setHasFixedSize(true);
-                mRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+        contactAdapter=new ContactAdapter(data);
+
+
+        mRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
             mRecyclerview.setAdapter(contactAdapter);
     }
 
@@ -87,7 +90,7 @@ public class MyContactListFragment extends Fragment {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 1) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getContacts();
+                vm.getContacts();
             }
         }
     }
