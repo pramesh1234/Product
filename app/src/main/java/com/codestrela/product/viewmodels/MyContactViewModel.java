@@ -29,14 +29,15 @@ public class MyContactViewModel {
     ArrayList<Contact> contacts;
     private static StringBuffer no=new StringBuffer(" ");
     CollectionReference usersCref;
-    ArrayList<RowContactViewModel> data;
+
 
     public ContactAdapter contactAdapter;
     private static final String TAG = "MyContactViewModel";
+    public static final  String CONTACT_LIST="contact_list";
 
     public MyContactViewModel(MyContactListFragment myContactListFragment) {
         this.myContactListFragment = myContactListFragment;
-        data = new ArrayList<RowContactViewModel>();
+
         db = FirebaseFirestore.getInstance();
         contacts=new ArrayList<>();
 
@@ -61,7 +62,6 @@ public class MyContactViewModel {
                             if (task.isSuccessful()) {
                                 RowContactViewModel viewModel = new RowContactViewModel();
                                 DocumentSnapshot document = task.getResult();
-                                data.clear();
                                 if (document.exists()) {
                                     CharSequence s=mobile;
                                     no.append(s);
@@ -71,30 +71,22 @@ public class MyContactViewModel {
                                     Log.e(TAG, "getContacts:" + name + "  phone " + mobile);
                                     viewModel.visiblity.set(false);
                                     Log.e(TAG,"array list: "+contacts.size());
-                                    data.add(viewModel);
-
-
-
                                 } else {
                                     viewModel.contactName.set(name);
                                     viewModel.contactNumber.set(mobile);
                                     viewModel.visiblity.set(true);
-                                    data.add(viewModel);
-
-
-
                                 }
                                 SharedPreferences sharedPreferences=myContactListFragment.getActivity().getSharedPreferences("shared preference", Context.MODE_PRIVATE);
                                  SharedPreferences.Editor editor=sharedPreferences.edit();
                                 Gson gson=new Gson();
                                 String json=gson.toJson(contacts);
-                                editor.putString("task list",json);
+                                editor.putString(CONTACT_LIST,json);
                                 editor.apply();
-
+                                contactAdapter.add(viewModel);
                             } else {
                                Log.e(TAG,"unsuccessfull");
                             }
-                            contactAdapter.addAll(data);  }
+                           }
                     }
                     );
             Log.e(TAG, "getContacts: " + no);

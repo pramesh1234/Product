@@ -34,4 +34,8 @@ public class ContactAdapter extends RecyclerBaseAdapter {
         this.contactArrayList.addAll(rowContactViewModels);
         notifyDataSetChanged();
     }
+    public void add(RowContactViewModel rowContactViewModel) {
+        this.contactArrayList.add(rowContactViewModel);
+        notifyDataSetChanged();
+    }
 }

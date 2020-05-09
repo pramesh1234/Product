@@ -1,4 +1,8 @@
 <resources>
     <integer name="slide_animation_duration">300</integer>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="pop_width">16dp</dimen>
+    <dimen name="pop_height">16dp</dimen>
+    <dimen name="popup_height">700</dimen>
+    <dimen name="popup_width">300</dimen>
 </resources>

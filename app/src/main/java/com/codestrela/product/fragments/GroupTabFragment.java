@@ -20,8 +20,8 @@ import com.codestrela.product.viewmodels.GroupTabViewModel;
  * create an instance of this fragment.
  */
 public class GroupTabFragment extends Fragment {
-GroupTabViewModel vm;
-FragmentGroupTabBinding binding;
+    GroupTabViewModel vm;
+    FragmentGroupTabBinding binding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

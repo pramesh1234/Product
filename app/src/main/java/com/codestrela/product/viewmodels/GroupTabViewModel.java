@@ -6,8 +6,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
 import com.codestrela.product.data.Contact;
 import com.codestrela.product.fragments.GroupTabFragment;
+import com.codestrela.product.fragments.ListDialogFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -18,17 +22,16 @@ public class GroupTabViewModel {
     GroupTabFragment groupTabFragment;
     ArrayList<Contact> contacts;
     private static final String TAG = "GroupTabViewModel";
+    public static final String CONTACT_LIST="contact_list";
+    FragmentManager fm;
+    ListDialogFragment tv;
+
     public GroupTabViewModel(GroupTabFragment groupTabFragment) {
         this.groupTabFragment=groupTabFragment;
+        fm=groupTabFragment.getActivity().getSupportFragmentManager();
+        tv=new ListDialogFragment();
     }
     public void onCreateGroup(View view){
-       contacts=new ArrayList<>();
-        SharedPreferences sharedPreferences=groupTabFragment.getActivity().getSharedPreferences("shared preference", Context.MODE_PRIVATE);
-        Gson gson=new Gson();
-        String json=sharedPreferences.getString("task list",null);
-        Toast.makeText(groupTabFragment.getActivity(), ""+json, Toast.LENGTH_SHORT).show();
-        Type type=new TypeToken<ArrayList<Contact>>(){}.getType();
-        contacts=gson.fromJson(json,type);
-        Log.e(TAG,"array size: "+contacts.size());
+      tv.show(fm,"fma");
     }
 }
