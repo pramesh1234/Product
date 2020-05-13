@@ -1,13 +1,18 @@
 package com.codestrela.product.data;
 
+import java.util.ArrayList;
+
 public class Contact {
     String name;
     String number;
-
+    public ArrayList<String> s=new ArrayList<>();
+    public Contact(){}
     public Contact(String name, String number) {
         this.name = name;
         this.number = number;
     }
+
+
 
     public String getName() {
         return name;

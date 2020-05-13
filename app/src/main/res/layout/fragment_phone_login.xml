@@ -30,4 +30,15 @@
             android:layout_below="@+id/etOtp"
             android:layout_centerInParent="true"
             android:layout_marginTop="20dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Resend"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_below="@id/login"
+            android:textSize="24dp"
+            android:onClick="@{vm::onResendClicked}"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="12dp"/>
     </RelativeLayout></layout>

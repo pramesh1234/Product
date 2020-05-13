@@ -1,14 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="vm"
             type="com.codestrela.product.viewmodels.ListDialogViewModel" />
     </data>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal">
+        <ProgressBar
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:bindVisibility="@{vm.progressShow}"
+           />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="24dp"
+                android:layout_marginLeft="12dp"
+                android:text="Loading..."/>
+        </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:bindVisibility="@{vm.contactShow}"
         android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Group name :"
+            android:textSize="20dp"
+            android:layout_margin="8dp"
+            android:textStyle="bold"
+            android:textColor="#353434"
+            android:layout_marginLeft="20dp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:hint="Enter Group Name"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="12dp"
+            app:binding="@{vm.groupName}"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -21,7 +63,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            setRecyclerViewAdapter="@{vm.adapter}"/>
+            setRecyclerViewAdapter="@{vm.adapter}"
+            />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,13 +74,16 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="submit"
+                android:onClick="@{vm::onSubmitContact}"
                 android:layout_margin="20dp"/>
             <Button
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:onClick="@{vm::onCancelPressed}"
                 android:layout_margin="20dp"
                 android:text="cancel"/>
         </LinearLayout>
     </LinearLayout>
+    </RelativeLayout>
 </layout>

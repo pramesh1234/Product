@@ -123,4 +123,18 @@ public class PhoneLoginViewModel {
         verifycode(code);
 
     }
+    public void onResendClicked(View view){
+        resendVerificationCode(PhoneNumber,mResendToken);
+        Toast.makeText(phoneLoginFragment.getActivity(), "code sent successfully", Toast.LENGTH_SHORT).show();
+    }
+    private void resendVerificationCode(String phoneNumber,
+                                        PhoneAuthProvider.ForceResendingToken token) {
+        PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                phoneNumber,        // Phone number to verify
+                60,                 // Timeout duration
+                TimeUnit.SECONDS,   // Unit of timeout
+                phoneLoginFragment.getActivity(),               // Activity (for callback binding)
+                mCallbacks,         // OnVerificationStateChangedCallbacks
+                token);             // ForceResendingToken from callbacks
+    }
 }

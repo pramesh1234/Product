@@ -70,7 +70,7 @@ PhoneSignInViewModel vm;
     }
 
     public static void addFragment(BaseActivity activity) {
-        activity.replaceFragment(new PhoneSignInFragment(), true);
+        activity.replaceFragment(new PhoneSignInFragment(), false  );
     }
 
     @Override

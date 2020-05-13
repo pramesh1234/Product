@@ -54,6 +54,6 @@ public class PhoneLoginFragment extends Fragment {
     }
 
     public static void addFragment(BaseActivity activity, Fragment fragment) {
-        activity.replaceFragment(fragment, true);
+        activity.replaceFragment(fragment, false);
     }
 }
