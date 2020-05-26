@@ -81,7 +81,7 @@ public class GmailRegisterTwoViewModel {
                                     saveNo.put("Phone Number", PhoneNumber);
                                     saveNo.put("Name", personName);
                                     saveNo.put("Email", personEmail);
-                                    db.collection("users").document(userId).set(saveNo);
+                                    db.collection("db_v1").document("barter_doc").collection("users").document().set(saveNo);
                                     Map<String, Object> userContact = new HashMap<>();
                                     userContact.put("userId",userId);
                                     db.collection("user contact").document(PhoneNumber).set(userContact);

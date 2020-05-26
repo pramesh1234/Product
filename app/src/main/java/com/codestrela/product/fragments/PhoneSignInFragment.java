@@ -1,6 +1,8 @@
 package com.codestrela.product.fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -30,6 +32,11 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 public class PhoneSignInFragment extends Fragment {
@@ -37,6 +44,9 @@ FragmentPhoneSignInBinding binding;
 PhoneSignInViewModel vm;
     SignInButton signInButton;
     FirebaseAuth mAuth;
+    FirebaseFirestore db;
+    private static final String SHARED_PREFS = "sharedPrefs";
+    private static final String KEY = "documentIdKey";
     GoogleSignInClient mGoogleSignInClient;
     public static final int RC_SIGN_IN = 1;
 
@@ -59,6 +69,7 @@ PhoneSignInViewModel vm;
         mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
         signInButton = (SignInButton) binding.getRoot().findViewById(R.id.signIn);
         signInButton.setSize(SignInButton.SIZE_STANDARD);
+        db=FirebaseFirestore.getInstance();
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,10 +118,19 @@ PhoneSignInViewModel vm;
                             if (isNew) {
                                 GmailRegisterFragment.addFragment((BaseActivity) getActivity());
                                 Toast.makeText(getActivity(), "first", Toast.LENGTH_SHORT).show();
+                                GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
+                                if (acct != null) {
+                                    String personEmail = acct.getEmail();
+                                    checkUser(personEmail);
+                                }
                             } else {
-
                                 HomeFragment.addFragment((BaseActivity) getActivity());
                                 Toast.makeText(getActivity(), "second", Toast.LENGTH_SHORT).show();
+                                GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
+                                if (acct != null) {
+                                    String personEmail = acct.getEmail();
+                                    checkUser(personEmail);
+                                }
                             }
                         } else {
                             // If sign in fails, display a message to the user.
@@ -146,5 +166,34 @@ PhoneSignInViewModel vm;
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+    public void checkUser(String email){
+
+        db.collection("db_v1").document("barter_doc").collection("users").whereEqualTo("Email",email)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            if(task.getResult().isEmpty()){
+                                Toast.makeText(getContext(), "Not present", Toast.LENGTH_SHORT).show();
+                            }else {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    saveData(getContext(),document.getId());
+                                    Toast.makeText(getContext(), "Phone number is already present"+document.getId(), Toast.LENGTH_SHORT).show();
+
+                                }
+
+                            }
+                        }
+                    }
+                });
+    }
+
+    public static void saveData(Context context, String id) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY, id);
+        editor.apply();
     }
 }

@@ -60,6 +60,6 @@ public class HomeFragment extends Fragment {
     }
 
     public static void addFragment(BaseActivity activity) {
-        activity.replaceFragment(new HomeFragment(), false);
+        activity.replaceFragment(new HomeFragment(), true);
     }
 }

@@ -1,5 +1,7 @@
 package com.codestrela.product.viewmodels;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -36,6 +38,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+import static android.content.Context.MODE_PRIVATE;
 import static androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
 public class HomeViewModel {
@@ -46,6 +49,8 @@ public class HomeViewModel {
     public BindableString cusName = new BindableString();
     public BindableString cusNumber = new BindableString();
     public BindableString cusEmail = new BindableString();
+    private static final String SHARED_PREFS = "sharedPrefs";
+    private static final String KEY = "documentIdKey";
     GoogleSignInClient mGoogleSignInClient;
     private static final String TAG = "HomeViewModel";
     public HomeAdapter mViewPagerAdapter;
@@ -63,7 +68,7 @@ public class HomeViewModel {
         mGoogleSignInClient= GoogleSignIn.getClient(homeFragment.getActivity(),gso);
         showData();
         mViewPagerAdapter = new HomeAdapter(homeFragment.getChildFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-
+        Toast.makeText(homeFragment.getActivity(), "g "+loadData(homeFragment.getContext()), Toast.LENGTH_SHORT).show();
 
     }
 
@@ -100,6 +105,11 @@ public class HomeViewModel {
 
             }
         });
+    }
+    public static String loadData(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        String text = sharedPreferences.getString(KEY, "");
+        return text;
     }
       public void onAccountClicked(View view){
           MyAccountFragment.addFragment((BaseActivity)homeFragment.getActivity());

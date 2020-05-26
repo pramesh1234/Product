@@ -6,6 +6,9 @@
             name="vm"
             type="com.codestrela.product.viewmodels.ListDialogViewModel" />
     </data>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -85,5 +88,5 @@
                 android:text="cancel"/>
         </LinearLayout>
     </LinearLayout>
-    </RelativeLayout>
+    </RelativeLayout></ScrollView>
 </layout>

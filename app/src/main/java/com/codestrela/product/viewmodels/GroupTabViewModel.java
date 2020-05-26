@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.codestrela.product.adapters.GroupListAdapter;
 import com.codestrela.product.data.Contact;
+import com.codestrela.product.data.Group;
 import com.codestrela.product.fragments.GroupTabFragment;
 import com.codestrela.product.fragments.ListDialogFragment;
 import com.google.firebase.firestore.DocumentChange;
@@ -30,11 +31,12 @@ public class GroupTabViewModel {
     GroupTabFragment groupTabFragment;
     ArrayList<Contact> contacts;
     private static final String TAG = "GroupTabViewModel";
-    public static final String CONTACT_LIST="contact_list";
+    public static final String GROUP_LIST="group_list";
     FragmentManager fm;
    public GroupListAdapter adapter;
     ListDialogFragment tv;
     RowGroupListViewModel viewModel;
+    ArrayList<Group> group;
     ArrayList<RowGroupListViewModel> groupList;
 
     public GroupTabViewModel(GroupTabFragment groupTabFragment) {
@@ -51,14 +53,23 @@ public class GroupTabViewModel {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 groupList =new ArrayList<>();
+                group=new ArrayList<>();
                 for(DocumentChange doc: queryDocumentSnapshots.getDocumentChanges()){
                     if(doc.getType()==DocumentChange.Type.ADDED){
                     String name=doc.getDocument().getString("groupName");
-                    viewModel=new RowGroupListViewModel();
+                    String groupId=doc.getDocument().getString("groupId");
+                    viewModel=new RowGroupListViewModel(groupTabFragment,groupId);
                     viewModel.groupName.set(name);
+                    group.add(new Group(viewModel.groupName.get(),groupId));
                     groupList.add(viewModel);
                 }
             }
+                SharedPreferences sharedPreferences=groupTabFragment.getActivity().getSharedPreferences("shared preference", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor=sharedPreferences.edit();
+                Gson gson=new Gson();
+                String json=gson.toJson(group);
+                editor.putString(GROUP_LIST,json);
+                editor.apply();
                 adapter.addAll(groupList);
             }
 

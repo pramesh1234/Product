@@ -1,5 +1,6 @@
 package com.codestrela.product.viewmodels;
 
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -8,9 +9,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.codestrela.product.base.activity.BaseActivity;
+import com.codestrela.product.fragments.EmailOtpVerificationFragment;
 import com.codestrela.product.fragments.EmailRegisterFragment;
 import com.codestrela.product.fragments.EmailSignInFragment;
 import com.codestrela.product.fragments.HomeFragment;
+import com.codestrela.product.fragments.PhoneLoginFragment;
 import com.codestrela.product.util.BindableBoolean;
 import com.codestrela.product.util.BindableString;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -42,6 +45,7 @@ public class EmailRegisterViewModel {
         this.emailRegisterFragment = emailRegisterFragment;
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+        running.set(true);
     }
 
     private void createAccount(final String email, String password) {
@@ -64,7 +68,7 @@ public class EmailRegisterViewModel {
                             saveDetail.put("Phone Number", number.get());
                             saveDetail.put("Email", email);
                             saveDetail.put("Name", name.get());
-                            db.collection("users").document(userId).set(saveDetail);
+                            db.collection("db_v1").document("barter_doc").collection("users").document().set(saveDetail);
                             Map<String, Object> userContact = new HashMap<>();
                             userContact.put("userId",userId);
                             db.collection("user contact").document(number.get()).set(userContact);
@@ -88,21 +92,47 @@ public class EmailRegisterViewModel {
     public void onRegister(View view) {
 
         Log.e(TAG, "onResponse: " + email.get());
-        Query q1=db.collection("users").whereEqualTo("Email",email.get());
-       q1.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("db_v1").document("barter_doc").collection("users").whereEqualTo("Email",email.get())
+       .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
            @Override
            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-               QuerySnapshot document = task.getResult();
+               if(task.isSuccessful()){
+                   if(task.getResult().isEmpty()){
+                       db.collection("db_v1").document("barter_doc").collection("users").whereEqualTo("Phone Number","+91"+number.get())
+                               .get()
+                               .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                   @Override
+                                   public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                       if(task.isSuccessful()){
+                                           if(task.getResult().isEmpty()){
+                                           //    createAccount(email.get(), password.get());
+                                                   EmailOtpVerificationFragment fragment = new EmailOtpVerificationFragment();
+                                                   Bundle bundle = new Bundle();
+                                                   bundle.putString("phoneNumber", number.get());
+                                                   bundle.putString("email", email.get());
+                                                   bundle.putString("password", password.get());
+                                                   bundle.putString("name", name.get());
+                                                   fragment.setArguments(bundle);
+                                               Toast.makeText(emailRegisterFragment.getActivity(), "Phone", Toast.LENGTH_SHORT).show();
+                                               fragment.addFragment((BaseActivity) emailRegisterFragment.getActivity(), fragment);
 
-               Toast.makeText(emailRegisterFragment.getActivity(), "present", Toast.LENGTH_SHORT).show();
-               present=true;
+                                           }else{
+                                               Toast.makeText(emailRegisterFragment.getActivity(), "Phone number is already present", Toast.LENGTH_SHORT).show();
+                                           }
+                                       }
+                                   }
+                               });
+
+                   }else{
+                       Toast.makeText(emailRegisterFragment.getActivity(), "Email is already present", Toast.LENGTH_SHORT).show();
+
+                   }
+
+               }   else {
+                   Toast.makeText(emailRegisterFragment.getActivity(), "ddd"+task.getException(), Toast.LENGTH_SHORT).show();
+               }
            }
        });
-       if(present){
-           Toast.makeText(emailRegisterFragment.getActivity(), "teree", Toast.LENGTH_SHORT).show();
-       }else {
-           createAccount(email.get(), password.get());
-       }
     }
 
     private boolean validateForm() {
